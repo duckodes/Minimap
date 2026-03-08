@@ -4,6 +4,7 @@ body {
     width: 100dvw;
     height: 100dvh;
     overflow: hidden;
+    background: #231F20;
 }
 
 #unity-container {
