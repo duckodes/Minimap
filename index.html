@@ -127,10 +127,8 @@
         document.addEventListener("fullscreenchange", function () {
           if (!document.fullscreenElement) {
             JSData.IsFullScreen = false;
-            console.log("isNotFullScreen");
           } else {
             JSData.IsFullScreen = true;
-            console.log("isFullScreen");
           }
           unityInstance.SendMessage("JSReceiver", "SetData", JSON.stringify(JSData));
         });
