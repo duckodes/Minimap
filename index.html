@@ -12,6 +12,7 @@
 <body>
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <input type="file" id="fileInput" accept="image/*">
     <div id="unity-loading-bar">
       <div id="unity-logo"></div>
       <div id="unity-progress-bar-empty">
@@ -87,7 +88,7 @@
     // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
     // expected to change.
 
-    var JSData = { Platform: "", IsFullScreen: false };
+    var JSData = { Platform: "", IsFullScreen: false, UploadImage: "" };
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       JSData.Platform = "Mobile";
       // Mobile device style: fill the whole browser client area with the game canvas:
@@ -131,6 +132,19 @@
             JSData.IsFullScreen = true;
           }
           unityInstance.SendMessage("JSReceiver", "SetData", JSON.stringify(JSData));
+        });
+        document.getElementById("fileInput").addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            JSData.UploadImage = e.target.result.split(',')[1];
+            unityInstance.SendMessage("JSReceiver", "SetData", JSON.stringify(JSData));
+          };
+          reader.readAsDataURL(file);
+        });
+        document.getElementById("fileInput").addEventListener("click", function () {
+          document.getElementById("fileInput").value = "";
         });
 
         unityInstance.SendMessage("JSReceiver", "SetData", JSON.stringify(JSData));
